@@ -26,3 +26,18 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::prefix('chef')
+->middleware('can:chef-higher')
+->group(function(){
+    Route::get('index',function () {
+        dd('chef');
+    });
+});
+
+Route::middleware('can:user-higher')
+->group(function(){
+    Route::get('index',function(){
+        dd('user');
+    });
+});
