@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +31,7 @@ Route::middleware([
 Route::prefix('chef')
 ->middleware('can:chef-higher')
 ->group(function(){
-    Route::get('index',function () {
-        dd('chef');
-    });
+    Route::resource('events', EventController::class);
 });
 
 Route::middleware('can:user-higher')
