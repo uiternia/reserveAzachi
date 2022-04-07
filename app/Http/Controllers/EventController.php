@@ -14,7 +14,10 @@ class EventController extends Controller
     
     public function index()
     {
+        $today = Carbon::today();
+
         $events = DB::table('events')
+        ->whereDate('start_date','>=' , $today)
         ->orderBy('start_date','asc')
         ->paginate(10);
         return view('chef.events.index',
@@ -62,24 +65,76 @@ class EventController extends Controller
         $eventDate = $event->eventDate;
         $startTime = $event->start_time;
         $endTime = $event->end_time;
-        
+
         return view('chef.events.show',compact('event','eventDate','startTime','endTime'));
     }
 
     public function edit(Event $event)
     {
-        //
+        $event = Event::findOrFail($event->id);
+        $eventDate = $event->editEventDate;
+        $startTime = $event->start_time;
+        $endTime = $event->end_time;
+        
+        return view('chef.events.edit',compact('event','eventDate','startTime','endTime'));
     }
 
     
     public function update(UpdateEventRequest $request, Event $event)
     {
-        //
+        
+        $check =  EventService::countDuplication(
+            $event->id,
+            $request['event_date'],
+            $request['start_time'],
+            $request['end_time']
+        );
+
+        if($check){
+            $event = Event::findOrFail($event->id);
+
+            $eventDate = $event->editEventDate;
+            $startTime = $event->start_time;
+            $endTime = $event->end_time;
+            
+            session()->flash('status','この時間帯は他のイベントが存在します。');
+            return view('chef.events.edit',compact('event','eventDate','startTime','endTime'));
+        }
+
+        $startDate = EventService::joinDateAndTime($request['event_date'],$request['start_time']);
+        $endDate = EventService::joinDateAndTime($request['event_date'],$request['end_time']);
+
+        $event = Event::findOrFail($event->id);
+        $event->name = $request['event_name'];
+        $event->information = $request['information'];
+        $event->start_date = $startDate;
+        $event->end_date = $endDate;
+        $event->max_people = $request['max_people'];
+        $event->is_visible = $request['is_visible'];
+        $event->save();
+            
+        session()->flash('status','イベント内容を更新しました');
+        return to_route('events.index');
+
     }
 
     
     public function destroy(Event $event)
     {
-        //
+        // $event = Event::findOrFail($event->id);
+        // $event->delete();
+        // session()->flash('status','イベントを消去しました。');
+        // return to_route('events.index');
+    }
+
+    public function past()
+    {
+        $today = Carbon::today();
+        $events = DB::table('events')
+        ->whereDate('start_date', '<' , $today)
+        ->orderBy('start_date','desc')
+        ->paginate(10);
+
+        return view('chef.events.past',compact('events'));
     }
 }

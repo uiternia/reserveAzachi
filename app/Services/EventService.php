@@ -17,6 +17,31 @@ class EventService
         return $check;
   }
 
+  public static function countDuplication($ownEventId,$eventDate, $startTime, $endTime)
+  {
+    $event = DB::table('events')
+		->whereDate('start_date', $eventDate)
+		->whereTime('end_date', '>', $startTime)
+		->whereTime('start_date', '<', $endTime)
+		->get()
+		->toArray();
+ 
+        // そもそも日付が重複していない
+	if (empty($event)) {
+		return false;
+	}
+ 
+        // 重複があったイベントのidを取得
+	$eventId = $event[0]->id;
+ 
+        // 重複していたイベントが自身の場合、重なっていないと判定
+	if ($ownEventId === $eventId) {
+		return false;
+	} else {
+		return true;
+	}
+  }
+
   public static function joinDateAndTime($date,$time)
   {
     $join = $date . " " . $time;

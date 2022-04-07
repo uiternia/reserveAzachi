@@ -31,6 +31,7 @@ Route::middleware([
 Route::prefix('chef')
 ->middleware('can:chef-higher')
 ->group(function(){
+    Route::get('events/past',[EventController::class,'past'])->name('events.past');
     Route::resource('events', EventController::class);
 });
 
