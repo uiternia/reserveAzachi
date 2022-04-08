@@ -48,4 +48,21 @@ class EventService
     $dateTime = Carbon::createFromFormat('Y-m-d H:i', $join);
     return $dateTime;
   }
+
+  public static function getWeekEvents($startDate,$endDate)
+  {
+    $reservedPeople = DB::table('reserves')
+        ->select('event_id', DB::raw('sum(number_of_people) as number_of_people'))
+        ->whereNull('canceled_date')
+        ->groupBy('event_id');
+
+        return DB::table('events')
+        ->leftJoinSub($reservedPeople, 'reservedPeople', function($join){
+        $join->on('events.id', '=', 'reservedPeople.event_id'); })
+        ->whereBetween('start_date',[$startDate,$endDate])
+        ->orderBy('start_date','asc')
+        ->get();
+        return view('chef.events.index',
+        compact('events'));
+  }
 }
