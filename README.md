@@ -39,12 +39,4 @@ php artisan serve
 画像のリンク
 php artisan storage:link
 
-プロフィールページで画像アップロードの機能を使う場合は
-.envファイルのAPP＿URLを下記に変更お願いいたします。
-
-＃変更前
-APP_URL=http:\\localhost
-
-#変更後
-APP_URL=http://127.0.0.1:8000
 
