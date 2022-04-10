@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 overflow-scroll">
+    <div class="py-12 overflow-scroll bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
         <div class="event-calendar  mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 @if (session('status'))
