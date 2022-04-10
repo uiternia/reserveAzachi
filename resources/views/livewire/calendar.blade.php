@@ -29,9 +29,9 @@
                 </a>
                    @if($eventPeriod > 0)
                      @for($k = 0; $k < $eventPeriod; $k++)
-                        {{-- <div class="text-sm  py-1 px-2 h-8 border opacity-60 border-gray-300 bg-gray-300"></div> --}}
+                        <div class="text-sm  py-1 px-2 h-8 border opacity-60 border-gray-300 bg-gray-300"></div>
                    @endfor
-              {{-- @php $j += $eventPeriod @endphp --}}
+              @php $j += $eventPeriod @endphp
             @endif
             @else
             <div class="py-1 px-2 h-8 border border-gray-200"></div>
