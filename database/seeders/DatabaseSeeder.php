@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         
-        Event::factory(100)->create();
+        // Event::factory(100)->create();
         $this->call([
             UserSeeder::class,
-            ReserveSeeder::class,
+            // ReserveSeeder::class,
         ]);
     }
 }
